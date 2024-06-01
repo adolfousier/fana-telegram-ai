@@ -38,7 +38,9 @@ async function handleTelegramMessage(message) {
 
         // Extract the text from the JSON response
         const responseText = result.text || 'Could not retrieve response text';
-        const escapedResponseText = responseText.replace(/[\.|-|!]/g, '\\$&'); // Escape dot (.) escape (!) and hyphen (-) characters
+        const escapedResponseText = responseText
+          .replace(/-/g, '\\-')
+          .replace(/[\.|!|#|(|)]/g, '\\$&'); // Escape dot (.), escape (!) and hyphen (-) characters
 
 
         // Log for outgoing message
