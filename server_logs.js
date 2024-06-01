@@ -10,6 +10,8 @@ const API_URL = process.env.API_URL;
 
 // Function to make the query
 async function query(data) {
+    console.log('Starting query function...');
+    console.log('Data to send:', data);
     try {
         const response = await axios.post(API_URL, data, {
             headers: {
@@ -17,9 +19,11 @@ async function query(data) {
                 'Content-Type': 'application/json',
             },
         });
+        console.log('Response received:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error in the query:', error.message);
+        console.error('Error details:', error);
         throw error;
     }
 }
@@ -29,37 +33,40 @@ async function handleTelegramMessage(message) {
     const chatId = message.chat.id;
     const text = message.text;
 
+    console.log(`Handling message from chatId ${chatId}: ${text}`);
+
     try {
         // Log for incoming message
         console.log(`Incoming message: ${text}`);
 
         // Make the query with the user's message
+        console.log('Calling query function...');
         const result = await query({ question: text });
 
         // Extract the text from the JSON response
         const responseText = result.text || 'Could not retrieve response text';
-        const escapedResponseText = responseText.replace(/[\.|-|!]/g, '\\$&'); // Escape dot (.) escape (!) and hyphen (-) characters
-
 
         // Log for outgoing message
-        console.log(`Response: ${escapedResponseText}`);
+        console.log(`Response: ${responseText}`);
 
         // Send the response to the Telegram chat
-        await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        const sendMessageUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        console.log(`Sending message to ${sendMessageUrl}`);
+        await axios.post(sendMessageUrl, {
             chat_id: chatId,
-            text: escapedResponseText, // Use the escaped response text
-            parse_mode: 'MarkdownV2', // Try using MarkdownV2
+            text: responseText,
         });
-	console.log(`Sent response to Telegram chat ${chatId}`);
+        console.log('Message sent successfully.');
     } catch (error) {
         // Handle errors
-        console.error('Error handling Telegram message:', error);
-        console.error('Error details:', error.response? error.response.data : null);
+        console.error('Error handling Telegram message:', error.message);
+        console.error('Error details:', error);
     }
 }
 
 // Configure the Telegram bot
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
+console.log('Telegram bot configured with polling.');
 
 // Handle Telegram messages
 bot.on('message', handleTelegramMessage);
@@ -69,3 +76,4 @@ const port = process.env.PORT || 3000;
 
 // Startup message
 console.log(`Telegram bot started. Listening on port ${port}...`);
+

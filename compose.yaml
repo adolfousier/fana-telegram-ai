@@ -1,0 +1,14 @@
+services:
+  telegram-ai:
+    image: telegram-ai
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - API_URL=${API_URL}
+      - API_TOKEN=${API_TOKEN}
+    ports:
+      - ${PORT}:3000

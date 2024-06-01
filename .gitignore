@@ -1,0 +1,48 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+lib/
+lib64/
+var/
+wheels/
+__pycache__/
+
+# Logs
+pip-log.txt
+pip-delete-this-directory.txt
+logs/
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.env.local
+.env.*.bak
+.env.backup
+.env.aimagine
+.env.aimagine.langfuse
+
+# macOS
+.DS_Store
+
+
+# Working directories
+Services/
+modules/groq_integration/
+pinata/
+modules/database
+modules/memory_resources
+client/modules
+

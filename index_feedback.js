@@ -38,25 +38,53 @@ async function handleTelegramMessage(message) {
 
         // Extract the text from the JSON response
         const responseText = result.text || 'Could not retrieve response text';
-        const escapedResponseText = responseText.replace(/[\.|-|!]/g, '\\$&'); // Escape dot (.) escape (!) and hyphen (-) characters
-
 
         // Log for outgoing message
-        console.log(`Response: ${escapedResponseText}`);
+        console.log(`Response: ${responseText}`);
 
         // Send the response to the Telegram chat
         await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
             chat_id: chatId,
-            text: escapedResponseText, // Use the escaped response text
-            parse_mode: 'MarkdownV2', // Try using MarkdownV2
+            text: responseText,
         });
-	console.log(`Sent response to Telegram chat ${chatId}`);
     } catch (error) {
         // Handle errors
-        console.error('Error handling Telegram message:', error);
-        console.error('Error details:', error.response? error.response.data : null);
+        console.error('Error handling Telegram message:', error.message);
     }
 }
+
+// Function to collate messages sent to the bot
+async function getMessageHistory(date) {
+    // Implement logic to get the messages sent to the bot
+}
+
+// Function to process the messages
+function processMessages(messages) {
+    // Implement logic to process the messages
+}
+
+// Function to generate the feedback
+function getFeedback(processedMessages) {
+    // Implement logic to generate the feedback
+}
+
+// Function to send the feedback to the user
+async function sendFeedback(feedback) {
+    // Implement logic to send the feedback to the user
+}
+
+// Function to send daily feedback
+async function sendDailyFeedback() {
+    const messages = await getMessageHistory(); // Implement logic to get messages sent to the bot
+    const processedMessages = processMessages(messages); // Process the messages
+    const feedback = getFeedback(processedMessages); // Generate the feedback
+    await sendFeedback(feedback); // Send the feedback to the user
+}
+
+// Schedule the daily feedback
+const cron = require('node-cron');
+
+cron.schedule('0 12 * * *', sendDailyFeedback); // Send feedback every day at 12:00
 
 // Configure the Telegram bot
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });

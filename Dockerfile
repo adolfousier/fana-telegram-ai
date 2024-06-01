@@ -1,5 +1,5 @@
 # Use a Node.js image as the base
-FROM node:18-bullseye as telegram-bot
+FROM node:18-bullseye as telegram-ai
 
 # Set the working directory in the application
 WORKDIR /usr/src/app
@@ -18,4 +18,5 @@ EXPOSE 3000
 
 # Command to run the application
 CMD ["npm", "start"]
+
 

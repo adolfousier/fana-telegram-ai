@@ -1,0 +1,5 @@
+docker run -d   --name fana-alerts  --env CONTAINER_NAME=fana-alerts   --env-file /srv/telegram-ai/env/.env.fana.alerts   -p 3005:3000  telegram-ai
+
+restart with
+docker compose down
+docker compose --env-file ./env/.env.fana.feedback  up -d --build
